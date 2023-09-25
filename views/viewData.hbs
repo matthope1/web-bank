@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<title>Web Bank</title>
+</head>
+<body>
+    <h1>{{data.bankName}}</h1>
+    <ul>
+        {{#each data.myList}}
+            <li>{{this}} [{{@index}}]</li>
+        {{/each}}
+    </ul>
+
+    {{#with data}}
+        {{#with location}}
+            <h3>{{data.bankName}} is located in {{city}}</h3>
+        {{/with}}
+    {{/with}}
+
+    
+    {{{body}}}
+</body>
+</html>
