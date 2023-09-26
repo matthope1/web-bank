@@ -4,17 +4,21 @@ const path = require("path");
 const app = express()
 const port = 3000
 
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+
 app.engine(".hbs", exphbs.engine({											
     extname: ".hbs",                                                 
     defaultLayout: false,                                              
     layoutsDir: path.join(__dirname, "/views")                           
-}));
+}))
 
 app.set("view engine", ".hbs");   
 
 app.get('/', (req, res) => {
   res.send(`It's alive... It's alive, it's moving, it's alive, it's alive, it's alive, it's alive, IT'S ALIVE!`)
 })
+
 app.get("/bank", (req,res) => {
     
     var bankData = {
@@ -33,7 +37,11 @@ app.get("/bank", (req,res) => {
         data: bankData 
     });
         
-});
+})
+
+app.post('/bank', (req, res) => {
+	console.log("post to bank req body", req.body)
+})
 
 app.get('*', (req, res) => {
     res.send('This page cannot be found (^_^)')

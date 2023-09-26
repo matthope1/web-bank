@@ -3,6 +3,7 @@
 <head>
 	<meta charset="UTF-8" />
 	<title>Web Bank</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css" integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
 </head>
 <body>
     <h1>{{data.bankName}}</h1>
@@ -18,6 +19,17 @@
         {{/with}}
     {{/with}}
 
+    <form method="post">
+        <div class="container">
+            <label for="uname"><b>Username</b></label>
+            <input type="text" placeholder="Enter Username" name="uname" required>
+
+            <label for="psw"><b>Password</b></label>
+            <input type="password" placeholder="Enter Password" name="psw" required>
+
+            <button type="submit">Login</button>
+        </div>
+    </form>
     
     {{{body}}}
 </body>
