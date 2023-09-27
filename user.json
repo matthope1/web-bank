@@ -1,3 +1,4 @@
 {
-	"testuser@gmail.com": "testpass"
+    "testuser@gmail.com": "testpass",
+    "newUserEmail@gmail.com": "newTestUserPass"
 }

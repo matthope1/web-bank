@@ -1,6 +1,7 @@
 const express = require('express')
-const exphbs = require('express-handlebars');
-const path = require("path");
+const exphbs = require('express-handlebars')
+const path = require('path')
+const fs = require('fs')
 const app = express()
 const port = 3000
 
@@ -39,8 +40,35 @@ app.get("/bank", (req,res) => {
         
 })
 
+app.get('/readFile', (req,res) => {
+    // read file
+    fs.readFile('./user.json', 'utf8', (err, data) => {
+        console.log("data form user data file")
+        const parsedData = JSON.parse(data) // convert json string to js object
+        console.log("parsed data", parsedData)
+    })
+
+    // read file sync
+    const rawdata = fs.readFileSync('./user.json')
+    let users = JSON.parse(rawdata)
+    // how to add a user
+    users['newUserEmail@gmail.com'] = "newTestUserPass"
+
+    // add new user to the user.json file
+    fs.writeFile('./user.json', JSON.stringify(users, null, 4), (err) => {
+        if (err) throw err;
+        console.log('The user file has been updated!');
+    })
+    // how to check if[user] exists in db
+    users.hasOwnProperty('testUser@gmail.com')
+
+
+    res.send('check console')
+})
+
 app.post('/bank', (req, res) => {
 	console.log("post to bank req body", req.body)
+    res.send("guts is just like me for real")
 })
 
 app.get('*', (req, res) => {
