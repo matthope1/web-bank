@@ -20,7 +20,7 @@ app.get('/', (req, res) => {
   res.send(`It's alive... It's alive, it's moving, it's alive, it's alive, it's alive, it's alive, IT'S ALIVE!`)
 })
 
-app.get("/bank", (req,res) => {
+app.get("/login", (req,res) => {
     
     var bankData = {
 				bankName: "Club Cyberia Bank",
@@ -67,7 +67,7 @@ app.get('/readFile', (req,res) => {
     res.send('check console')
 })
 
-app.post('/bank', (req, res) => {
+app.post('/login', (req, res) => {
 	console.log("post to bank req body", req.body)
     res.send("guts is just like me for real")
 })
