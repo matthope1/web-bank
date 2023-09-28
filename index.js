@@ -2,6 +2,7 @@ const express = require('express')
 const exphbs = require('express-handlebars')
 const path = require('path')
 const fs = require('fs')
+const { validatePassword } = require('./utils/utils')
 const app = express()
 const port = 3000
 
@@ -23,7 +24,7 @@ app.get('/', (req, res) => {
 app.get("/login", (req,res) => {
     
     var bankData = {
-				bankName: "Club Cyberia Bank",
+        bankName: "Club Cyberia Bank",
         timeOpen: {
             startTime: "9:30AM",
             finishTime: "12:30PM",
@@ -34,13 +35,39 @@ app.get("/login", (req,res) => {
         },
     };
 
-    res.render('viewData', {                                               
+    res.render('loginPage', {                                               
         data: bankData 
     });
         
 })
 
-app.get('/readFile', (req,res) => {
+app.post('/login', (req, res) => {
+    // TODO: create logic for checking if user exists in db
+    const {username, password} = req.body
+    const {passValid, msg} = validatePassword(username, password)
+    console.log({valid, msg})
+    // if its not valid, redirect to login page with err message
+    if (!passValid) {
+        res.render('loginPage', {
+            data: {
+                msg: msg,
+                bankName: "Club Cyberia Bank",
+                timeOpen: {
+                    startTime: "9:30AM",
+                    finishTime: "12:30PM",
+                },
+                myList: ["item1", "item2", "item3"],
+                location: {
+                    city: "Toronto",
+                },
+            }
+        })
+    }
+    // res.send(msg)
+})
+
+
+app.get('/test', (req,res) => {
     // read file
     fs.readFile('./user.json', 'utf8', (err, data) => {
         console.log("data form user data file")
@@ -65,11 +92,6 @@ app.get('/readFile', (req,res) => {
 
 
     res.send('check console')
-})
-
-app.post('/login', (req, res) => {
-	console.log("post to bank req body", req.body)
-    res.send("guts is just like me for real")
 })
 
 app.get('*', (req, res) => {

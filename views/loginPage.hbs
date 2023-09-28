@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<title>Web Bank</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css" integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
+    <style>
+        .wrapper {
+            padding: 15px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+
+        <h1>{{data.bankName}}</h1>
+        {{!-- <ul>
+            {{#each data.myList}}
+                <li>{{this}} [{{@index}}]</li>
+            {{/each}}
+        </ul> --}}
+
+        {{!-- {{#with data}}
+            {{#with location}}
+                <h3>{{data.bankName}} is located in {{city}}</h3>
+            {{/with}}
+        {{/with}} --}}
+
+        <form method="post">
+            <div class="container">
+                <label for="username"><b>Username</b></label>
+                <input type="text" placeholder="Enter Username" name="username" required>
+
+                <label for="password"><b>Password</b></label>
+                <input type="password" placeholder="Enter Password" name="password" required>
+
+                {{#if data.msg}}
+                    <p>{{data.msg}}</p>
+                {{/if}}
+
+                <button type="submit">Login</button>
+            </div>
+        </form>
+        
+        {{!-- {{{body}}} --}}
+
+    </div>
+</body>
+</html>

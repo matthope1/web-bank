@@ -1,6 +1,6 @@
 const fs = require('fs')
 
-export const getUserData = () => {
+const getUserData = () => {
 	// read file sync
 	// TODO: add err handling
 	const rawData = fs.readFileSync('./user.json')
@@ -8,7 +8,7 @@ export const getUserData = () => {
 	return users || {}
 }
 
-export const addNewUser = (usersArray) => {
+const addNewUser = (usersArray) => {
 	// add new user to the user.json file
 	fs.writeFile('./user.json', JSON.stringify(usersArray, null, 4), (err) => {
 		if (err) throw err;
@@ -19,3 +19,20 @@ export const addNewUser = (usersArray) => {
 	// fs.writeFileSync('./user.json', JSON.stringify(usersArray, null, 4))
 	// TODO: add err handling
 }
+
+const validatePassword = (username, password) => {
+	const userData = getUserData()
+	console.log("validating user pass...userData", userData)
+	// does user exist in db?
+	const userExists = userData.hasOwnProperty(username)
+	if (!userExists) {
+		return {passValid: false, msg: 'not a registered username'}
+	}
+	// does user pass match db pass?
+	if (userData[username] === password) {
+		return {passValid: true, msg: 'valid user and pass'} 
+	}
+	return {passValid: false, msg: 'Invalid password'} 
+}
+
+module.exports = { validatePassword };
