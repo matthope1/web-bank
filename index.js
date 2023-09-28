@@ -51,6 +51,7 @@ app.get('/readFile', (req,res) => {
     // read file sync
     const rawdata = fs.readFileSync('./user.json')
     let users = JSON.parse(rawdata)
+
     // how to add a user
     users['newUserEmail@gmail.com'] = "newTestUserPass"
 
