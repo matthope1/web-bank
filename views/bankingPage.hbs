@@ -5,6 +5,8 @@
 	<title>Web Bank</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css" integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
     <style>
+
+
         html,
         body {
             margin: 0;
@@ -19,6 +21,7 @@
         * {
             box-sizing: border-box;
         }
+
         .wrapper {
             padding: 15px;
             width: 400px;
@@ -33,42 +36,56 @@
             position: relative;
             top: -170px;
         }
+
+        #username {
+            opacity: 1;
+            transition: opacity 1s ease-in-out;
+        }
+
+        #logoutBtn {
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            position: absolute;
+            left: 0;
+        }
+
+        .usernameLogout:hover #username {
+            opacity: 0;
+        }
+
+        .usernameLogout:hover #logoutBtn {
+            opacity: 1;
+        }
+
+        .usernameLogout {
+            border: 1px solid purple;
+        }
+
     </style>
 </head>
 <body>
     <div class="wrapper">
         <div class="content">
-
-
             <h1>{{data.bankName}}</h1>
-            {{!-- <ul>
-                {{#each data.myList}}
-                    <li>{{this}} [{{@index}}]</li>
-                {{/each}}
-            </ul> --}}
-
-            {{!-- {{#with data}}
-                {{#with location}}
-                    <h3>{{data.bankName}} is located in {{city}}</h3>
-                {{/with}}
-            {{/with}} --}}
+            <div class="usernameLogout">
+                <span id="username">{{data.username}}</span>
+                <span id="logoutBtn">Logout</span>
+            </div>
 
             <form method="post">
                 <div class="container">
-                    <label for="username"><b>Username</b></label>
-                    <input type="text" placeholder="Enter Username" name="username" required>
 
-                    <label for="password"><b>Password</b></label>
-                    <input type="password" placeholder="Enter Password" name="password" required>
+                    <input type="text" placeholder="Account number" name="accNum">
 
-                    {{#if data.msg}}
-                        <p>{{data.msg}}</p>
-                    {{/if}}
+                    <label for="balance"><b>Balance</b></label>
+                    <input type="radio" placeholder="Enter Username" name="balance">
 
-                    <button type="submit">Login</button>
+                    <label for="deposit"><b>Deposit</b></label>
+                    <input type="radio" placeholder="Enter Password" name="deposit">
+
+                    <button type="submit">Submit</button>
                 </div>
             </form>
-        
         </div>
     </div>
 </body>

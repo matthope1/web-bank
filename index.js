@@ -4,7 +4,7 @@ const path = require('path')
 const fs = require('fs')
 const { validatePassword } = require('./utils/utils')
 const app = express()
-const port = 3000
+const port = process.env.PORT || 3000 
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -45,12 +45,28 @@ app.post('/login', (req, res) => {
     // TODO: create logic for checking if user exists in db
     const {username, password} = req.body
     const {passValid, msg} = validatePassword(username, password)
-    console.log({valid, msg})
+    console.log({passValid, msg})
     // if its not valid, redirect to login page with err message
     if (!passValid) {
         res.render('loginPage', {
             data: {
                 msg: msg,
+                bankName: "Club Cyberia Bank",
+                timeOpen: {
+                    startTime: "9:30AM",
+                    finishTime: "12:30PM",
+                },
+                myList: ["item1", "item2", "item3"],
+                location: {
+                    city: "Toronto",
+                },
+            }
+        })
+    } else {
+        res.render('bankingPage', {
+            data: {
+                msg: msg,
+                username: username,
                 bankName: "Club Cyberia Bank",
                 timeOpen: {
                     startTime: "9:30AM",
