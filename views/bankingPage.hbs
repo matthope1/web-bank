@@ -6,7 +6,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css" integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
     <style>
 
-
         html,
         body {
             margin: 0;
@@ -51,14 +50,20 @@
 
         .usernameLogout:hover #username {
             opacity: 0;
+            cursor: pointer;
         }
 
         .usernameLogout:hover #logoutBtn {
             opacity: 1;
+            cursor: pointer;
         }
 
         .usernameLogout {
             border: 1px solid purple;
+        }
+
+        #logoutForm {
+            display: none;
         }
 
     </style>
@@ -70,7 +75,7 @@
             <div class="usernameLogout">
                 <span id="username">{{data.username}}</span>
                 {{!-- TODO: the logout button should log the user out? basically we should rerender the login page --}}
-                <span id="logoutBtn" onclick="logout">Logout</span>
+                <span id="logoutBtn" onclick="logout()">Logout</span>
             </div>
 
             <form method="post">
@@ -88,10 +93,16 @@
                 </div>
             </form>
         </div>
+
+        <form id="logoutForm" method="get">
+            <input type="text" name="logout" value="logout" autocomplete="on">
+        </form>
+
     </div>
 <script>
     function logout() {
-        console.log('logout')
+        let logoutForm = document.getElementById('logoutForm')
+        logoutForm.submit()
     }
 </script>
 

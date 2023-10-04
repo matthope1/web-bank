@@ -1,6 +1,5 @@
 const express = require('express')
 const exphbs = require('express-handlebars')
-// TODO: import handlebars
 const path = require('path')
 const fs = require('fs')
 const { validatePassword } = require('./utils/utils')
@@ -17,18 +16,6 @@ app.engine(".hbs", exphbs.engine({
 }))
 
 app.set("view engine", ".hbs");   
-
-const testFunc = () => {
-    console.log("testFunc just got called")
-}
-
-// use handlebars to create a function for implementing
-// the logout button 
-
-
-// exphbs.registerHelper("testFunc", () => {
-//     console.log("testFunc just got called")
-// });
 
 app.get('/', (req, res) => {
   res.send(`It's alive... It's alive, it's moving, it's alive, it's alive, it's alive, it's alive, IT'S ALIVE!`)
@@ -55,7 +42,6 @@ app.get("/login", (req,res) => {
 })
 
 app.post('/login', (req, res) => {
-    // TODO: create logic for checking if user exists in db
     const {username, password} = req.body
     const {passValid, msg} = validatePassword(username, password)
     console.log({passValid, msg})
@@ -97,6 +83,9 @@ app.post('/login', (req, res) => {
 
 
 app.get('/test', (req,res) => {
+
+
+    // TODO: create utils file for all helper functions, add user, etc
     // read file
     fs.readFile('./user.json', 'utf8', (err, data) => {
         console.log("data form user data file")
@@ -105,8 +94,8 @@ app.get('/test', (req,res) => {
     })
 
     // read file sync
-    const rawdata = fs.readFileSync('./user.json')
-    let users = JSON.parse(rawdata)
+    const rawData = fs.readFileSync('./user.json')
+    let users = JSON.parse(rawData)
 
     // how to add a user
     users['newUserEmail@gmail.com'] = "newTestUserPass"
