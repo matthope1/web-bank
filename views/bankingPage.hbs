@@ -69,7 +69,8 @@
             <h1>{{data.bankName}}</h1>
             <div class="usernameLogout">
                 <span id="username">{{data.username}}</span>
-                <span id="logoutBtn">Logout</span>
+                {{!-- TODO: the logout button should log the user out? basically we should rerender the login page --}}
+                <span id="logoutBtn" onclick="logout">Logout</span>
             </div>
 
             <form method="post">
@@ -88,5 +89,11 @@
             </form>
         </div>
     </div>
+<script>
+    function logout() {
+        console.log('logout')
+    }
+</script>
+
 </body>
 </html>

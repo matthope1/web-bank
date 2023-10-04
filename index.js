@@ -1,5 +1,6 @@
 const express = require('express')
 const exphbs = require('express-handlebars')
+// TODO: import handlebars
 const path = require('path')
 const fs = require('fs')
 const { validatePassword } = require('./utils/utils')
@@ -16,6 +17,18 @@ app.engine(".hbs", exphbs.engine({
 }))
 
 app.set("view engine", ".hbs");   
+
+const testFunc = () => {
+    console.log("testFunc just got called")
+}
+
+// use handlebars to create a function for implementing
+// the logout button 
+
+
+// exphbs.registerHelper("testFunc", () => {
+//     console.log("testFunc just got called")
+// });
 
 app.get('/', (req, res) => {
   res.send(`It's alive... It's alive, it's moving, it's alive, it's alive, it's alive, it's alive, IT'S ALIVE!`)
