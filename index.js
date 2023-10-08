@@ -84,8 +84,6 @@ app.post('/login', (req, res) => {
 
 app.get('/test', (req,res) => {
 
-
-    // TODO: create utils file for all helper functions, add user, etc
     // read file
     fs.readFile('./user.json', 'utf8', (err, data) => {
         console.log("data form user data file")
