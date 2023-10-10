@@ -26,11 +26,11 @@ const validatePassword = (username, password) => {
 	// does user exist in db?
 	const userExists = userData.hasOwnProperty(username)
 	if (!userExists) {
-		return {passValid: false, msg: 'not a registered username'}
+		return {passValid: false, msg: 'Not a registered username'}
 	}
 	// does user pass match db pass?
 	if (userData[username] === password) {
-		return {passValid: true, msg: 'valid user and pass'} 
+		return {passValid: true, msg: 'Valid user and pass'} 
 	}
 	return {passValid: false, msg: 'Invalid password'} 
 }

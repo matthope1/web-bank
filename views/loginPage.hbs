@@ -3,8 +3,34 @@
 <head>
 	<meta charset="UTF-8" />
 	<title>Web Bank</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css" integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
     <style>
+        html,input {
+            background-color: #121212;
+            color: white;
+            font-family: sans-serif;
+        }
+        input {
+            background-color: #3f3f3f3f;
+            border: none;
+            border-radius: 8px;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        button {
+            width: 100%;
+            background-color: #a688fa;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-top: 10px;
+            padding: 10px;
+            font-weight: bold;
+            border: none;
+            color: black;
+        }
+        button:hover {
+            color: white;
+        }
+
         html,
         body {
             margin: 0;
@@ -33,6 +59,16 @@
             position: relative;
             top: -170px;
         }
+
+        label, input {
+            display: block;
+            width: 100%;
+        }
+
+        .err-msg {
+            color: #cc0000;
+        }
+
     </style>
 </head>
 <body>
@@ -48,7 +84,7 @@
                     <input type="password" placeholder="Enter Password" name="password" required>
 
                     {{#if data.msg}}
-                        <p>{{data.msg}}</p>
+                        <p class="err-msg">{{data.msg}}</p>
                     {{/if}}
 
                     <button type="submit">Login</button>

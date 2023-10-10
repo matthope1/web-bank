@@ -44,7 +44,7 @@ app.get("/login", (req,res) => {
 app.post('/login', (req, res) => {
     const {username, password} = req.body
     const {passValid, msg} = validatePassword(username, password)
-    console.log({passValid, msg})
+    // console.log({passValid, msg})
     // if its not valid, redirect to login page with err message
     if (!passValid) {
         res.render('loginPage', {
@@ -78,37 +78,36 @@ app.post('/login', (req, res) => {
             }
         })
     }
-    // res.send(msg)
 })
 
 
-app.get('/test', (req,res) => {
+// app.get('/test', (req,res) => {
 
-    // read file
-    fs.readFile('./user.json', 'utf8', (err, data) => {
-        console.log("data form user data file")
-        const parsedData = JSON.parse(data) // convert json string to js object
-        console.log("parsed data", parsedData)
-    })
+//     // read file
+//     fs.readFile('./user.json', 'utf8', (err, data) => {
+//         console.log("data form user data file")
+//         const parsedData = JSON.parse(data) // convert json string to js object
+//         console.log("parsed data", parsedData)
+//     })
 
-    // read file sync
-    const rawData = fs.readFileSync('./user.json')
-    let users = JSON.parse(rawData)
+//     // read file sync
+//     const rawData = fs.readFileSync('./user.json')
+//     let users = JSON.parse(rawData)
 
-    // how to add a user
-    users['newUserEmail@gmail.com'] = "newTestUserPass"
+//     // how to add a user
+//     users['newUserEmail@gmail.com'] = "newTestUserPass"
 
-    // add new user to the user.json file
-    fs.writeFile('./user.json', JSON.stringify(users, null, 4), (err) => {
-        if (err) throw err;
-        console.log('The user file has been updated!');
-    })
-    // how to check if[user] exists in db
-    users.hasOwnProperty('testUser@gmail.com')
+//     // add new user to the user.json file
+//     fs.writeFile('./user.json', JSON.stringify(users, null, 4), (err) => {
+//         if (err) throw err;
+//         console.log('The user file has been updated!');
+//     })
+//     // how to check if[user] exists in db
+//     users.hasOwnProperty('testUser@gmail.com')
 
 
-    res.send('check console')
-})
+//     res.send('check console')
+// })
 
 app.get('*', (req, res) => {
     res.send('This page cannot be found (^_^)')

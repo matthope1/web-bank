@@ -3,13 +3,38 @@
 <head>
 	<meta charset="UTF-8" />
 	<title>Web Bank</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css" integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
     <style>
 
         html,
         body {
             margin: 0;
             padding: 0;
+            font-family: sans-serif;
+        }
+        html,input {
+            background-color: #121212;
+            color: white;
+        }
+        input {
+            background-color: #3f3f3f3f;
+            border: none;
+            border-radius: 8px;
+            padding: 7px;
+            margin: 5px 0;
+        }
+        button {
+            width: 100%;
+            background-color: #a688fa;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-top: 10px;
+            padding: 7px;
+            font-weight: bold;
+            border: none;
+            color: black;
+        }
+        button:hover {
+            color: white;
         }
 
         body {
@@ -19,6 +44,13 @@
 
         * {
             box-sizing: border-box;
+        }
+
+        button {
+            margin-top: 20px;
+        }
+
+        input {
         }
 
         .wrapper {
@@ -45,7 +77,11 @@
             opacity: 0;
             transition: opacity 1s ease-in-out;
             position: absolute;
-            left: 0;
+            right: 0;
+        }
+
+        .usernameLogout {
+            text-align: right;
         }
 
         .usernameLogout:hover #username {
@@ -58,37 +94,43 @@
             cursor: pointer;
         }
 
-        .usernameLogout {
-            border: 1px solid purple;
-        }
-
         #logoutForm {
             display: none;
         }
+
+        #accNum {
+            width: 100%;
+            margin: 20px 0;
+        }
+
 
     </style>
 </head>
 <body>
     <div class="wrapper">
         <div class="content">
-            <h1>{{data.bankName}}</h1>
             <div class="usernameLogout">
                 <span id="username">{{data.username}}</span>
                 <span id="logoutBtn" onclick="logout()">Logout</span>
             </div>
 
+            <h1>{{data.bankName}}</h1>
             <form method="post">
                 <div class="container">
 
-                    <input type="text" placeholder="Account number" name="accNum">
+                    <input id="accNum" type="text" placeholder="Account number" name="accNum">
 
-                    <label for="balance"><b>Balance</b></label>
-                    <input type="radio" placeholder="Enter Username" name="balance">
+                    <div>
+                        <input id="balance" type="radio" name="balance" onclick="clickRadioBtn()">
+                        <label for="balance"><b>Balance</b></label>
+                    </div>
 
-                    <label for="deposit"><b>Deposit</b></label>
-                    <input type="radio" placeholder="Enter Password" name="deposit">
+                    <div>
+                        <input id="deposit" type="radio" name="deposit" onclick="clickRadioBtn()">
+                        <label for="deposit"><b>Deposit</b></label>
+                    </div>
 
-                    <button type="submit">Submit</button>
+                    <button disabled ="submit-btn" type="submit">Submit</button>
                 </div>
             </form>
         </div>
@@ -103,6 +145,15 @@
         let logoutForm = document.getElementById('logoutForm')
         logoutForm.submit()
     }
+
+    document.getElementById('balance').addEventListener('click', () => {
+        document.getElementById('deposit').checked = false
+    })
+
+    document.getElementById('deposit').addEventListener('click', () => {
+        document.getElementById('balance').checked = false
+    })
+
 </script>
 
 </body>
