@@ -130,6 +130,16 @@
                         <label for="deposit"><b>Deposit</b></label>
                     </div>
 
+                    <div>
+                        <input id="open-acc" type="radio" name="open-acc" onclick="clickRadioBtn()">
+                        <label for="open-acc" ><b>Open Account</b></label>
+                    </div>
+
+                    <div>
+                        <input id="withdrawal" type="radio", name="withdrawal" onclick="clickRadioBtn()">
+                        <label for="withdrawal"><b>Withdrawal</b></label>
+                    </div>
+
                     <button disabled ="submit-btn" type="submit">Submit</button>
                 </div>
             </form>
@@ -148,10 +158,26 @@
 
     document.getElementById('balance').addEventListener('click', () => {
         document.getElementById('deposit').checked = false
+        document.getElementById('withdrawal').checked = false
+        document.getElementById('open-acc').checked = false
     })
 
     document.getElementById('deposit').addEventListener('click', () => {
         document.getElementById('balance').checked = false
+        document.getElementById('withdrawal').checked = false
+        document.getElementById('open-acc').checked = false
+    })
+
+    document.getElementById('open-acc').addEventListener('click', () => {
+        document.getElementById('withdrawal').checked = false
+        document.getElementById('balance').checked = false
+        document.getElementById('deposit').checked = false
+    })
+
+    document.getElementById('withdrawal').addEventListener('click', () => {
+        document.getElementById('balance').checked = false
+        document.getElementById('deposit').checked = false
+        document.getElementById('open-acc').checked = false
     })
 
 </script>
