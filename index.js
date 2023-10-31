@@ -112,20 +112,6 @@ app.get('/test', (req,res) => {
     //     console.log("parsed data", parsedData)
     // })
 
-    // // read file sync
-    // const rawData = fs.readFileSync('./user.json')
-    // let users = JSON.parse(rawData)
-
-    // // how to add a user
-    // users['newUserEmail@gmail.com'] = "newTestUserPass"
-
-    // // add new user to the user.json file
-    // fs.writeFile('./user.json', JSON.stringify(users, null, 4), (err) => {
-    //     if (err) throw err;
-    //     console.log('The user file has been updated!');
-    // })
-    // // how to check if[user] exists in db
-    // users.hasOwnProperty('testUser@gmail.com')
 
 
     res.send('check console')

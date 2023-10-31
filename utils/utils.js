@@ -30,19 +30,29 @@ const getAccounts = () => {
 	return accounts || {}
 }
 
-const addNewUser = (usersArray) => {
+const addNewUser = (newUserEmail, newUserPass) => {
 	// get current users data 
 	// read file sync
 
+	// how to check if[user] exists in db
+	if (users.hasOwnProperty('testUser@gmail.com')) {
+		console.log("user exists")
+		return
+	}
+
+	// read file sync
+	const rawData = fs.readFileSync('./user.json')
+	let users = JSON.parse(rawData)
+
+	// how to add a user
+	users['newUserEmail@gmail.com'] = "newTestUserPass"
+
 	// add new user to the user.json file
-	fs.writeFile('./user.json', JSON.stringify(usersArray, null, 4), (err) => {
-		if (err) throw err;
-		console.log('The user file has been updated!');
+	fs.writeFile('./user.json', JSON.stringify(users, null, 4), (err) => {
+			if (err) throw err;
+			console.log('The user file has been updated!');
 	})
 
-	// TODO: rewrite using fs.writeFileSync 
-	// fs.writeFileSync('./user.json', JSON.stringify(usersArray, null, 4))
-	// TODO: add err handling
 }
 
 const validatePassword = (username, password) => {
