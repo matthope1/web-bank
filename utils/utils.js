@@ -8,7 +8,32 @@ const getUserData = () => {
 	return users || {}
 }
 
+const updateLastID = () => {
+	const rawData = fs.readFileSync('./accounts.json')
+	let accounts = JSON.parse(rawData)
+	let newId = parseInt(accounts.lastID) + 1
+	newId = newId.toString().padStart(7, '0')
+	accounts.lastID = newId
+
+	fs.writeFile('./accounts.json', JSON.stringify(accounts, null, 4), (err) => {
+		if (err) throw err;
+		console.log('The accounts file has been updated!');
+	})
+}
+
+const getAccounts = () => {
+	const rawData = fs.readFileSync('./accounts.json')
+	let accounts = JSON.parse(rawData)
+	console.log("get accounts: ", accounts)
+	// remove the last id record from accounts
+	delete accounts.lastID
+	return accounts || {}
+}
+
 const addNewUser = (usersArray) => {
+	// get current users data 
+	// read file sync
+
 	// add new user to the user.json file
 	fs.writeFile('./user.json', JSON.stringify(usersArray, null, 4), (err) => {
 		if (err) throw err;
@@ -35,4 +60,4 @@ const validatePassword = (username, password) => {
 	return {passValid: false, msg: 'Invalid password'} 
 }
 
-module.exports = { validatePassword };
+module.exports = { validatePassword, getAccounts, updateLastID};

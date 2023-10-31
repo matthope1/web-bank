@@ -1,15 +1,17 @@
 const express = require('express')
-const cookieParser = require("cookie-parser");
+const session = require('express-session')
 const exphbs = require('express-handlebars')
 const path = require('path')
 const fs = require('fs')
-const { validatePassword } = require('./utils/utils')
+const { validatePassword, getAccounts, updateLastID } = require('./utils/utils')
+const randomStr = require("randomstring");		
 const app = express()
 const port = process.env.PORT || 3000 
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-app.use(cookieParser());
+
+let strRandom = randomStr.generate();
 
 app.engine(".hbs", exphbs.engine({											
     extname: ".hbs",                                                 
@@ -19,14 +21,28 @@ app.engine(".hbs", exphbs.engine({
 
 app.set("view engine", ".hbs");   
 
+app.use(session ({
+	secret: strRandom,
+	saveUninitialized: true,
+	resave: false,
+	cookie: {
+		expires:  600000  // 10 minutes
+	}
+}));
+
 app.get('/', (req, res) => {
   res.send(`It's alive... It's alive, it's moving, it's alive, it's alive, it's alive, it's alive, IT'S ALIVE!`)
 })
 
+app.post('/logout', (req, res) => {
+    console.log("logout endpoint hit")
+    req.session.destroy()
+    res.redirect('/login')
+})
+
 app.get("/login", (req,res) => {
     
-    const { cookies } = req.cookies
-    console.log("login get cookies", cookies)
+    console.log("login get session", req.session.MySession)
 
     var bankData = {
         bankName: "Club Cyberia Bank",
@@ -40,35 +56,22 @@ app.get("/login", (req,res) => {
         },
     };
 
-    res.render('loginPage', {                                               
+    let page = 'loginPage'
+
+    if (req.session.MySession) { 
+        console.log("session exists")
+        bankData.username = req.session.MySession
+        page = 'bankingPage'
+    }
+    res.render(page, {                                               
         data: bankData 
     });
-        
 })
 
 app.post('/login', (req, res) => {
     const {username, password} = req.body
-    const { cookies } = req.cookies
     const {passValid, msg} = validatePassword(username, password)
-    // console.log({passValid, msg})
     // if its not valid, redirect to login page with err message
-
-    // sending a cookie
-    // console.log("Cookies from client: ", req.cookies);                              //  Displays cookies submitted via request message
-    // res.cookie("firstName", "Albert");                                              //  Set cookie name as "firstName" and value as "Albert"
-    // res.send("<h0>Send one cookie from server to client</h1>");
-    // end sending a cookie
-
-    // setting a cookie that expires
-    // res.cookie("expiration", "ten", {maxAge: 9999});                               //  Set cookie name as "expiration" and value as "ten" and expire in 10000 miliseconds
-    //  res.cookie(name, 'value', {expire: 359999 + Date.now()});                   //  Expires after 360000 ms from the time the cookie is set
-    // end setting a cookie that expires
-
-    //  getting cookie from request
-    // console.log("Cookies from client: ", req.cookies);   
-    //  end getting cookie from request
-
-    console.log("login post cookies", cookies)
 
     let page = ''
     let data = {
@@ -86,40 +89,47 @@ app.post('/login', (req, res) => {
     }
 
     page = passValid ? 'bankingPage' : 'loginPage'
-    console.log("setting username cookie...")
-    res.cookie("username", username);
-    res.render(page, {data})
+    console.log("setting username cookie..." ,username)
+    req.session.MySession = username;		
+    console.log("req.session.MySession" ,req.session.MySession)
 
+    res.render(page, {data})
 })
 
 
-// app.get('/test', (req,res) => {
-
-//     // read file
-//     fs.readFile('./user.json', 'utf8', (err, data) => {
-//         console.log("data form user data file")
-//         const parsedData = JSON.parse(data) // convert json string to js object
-//         console.log("parsed data", parsedData)
-//     })
-
-//     // read file sync
-//     const rawData = fs.readFileSync('./user.json')
-//     let users = JSON.parse(rawData)
-
-//     // how to add a user
-//     users['newUserEmail@gmail.com'] = "newTestUserPass"
-
-//     // add new user to the user.json file
-//     fs.writeFile('./user.json', JSON.stringify(users, null, 4), (err) => {
-//         if (err) throw err;
-//         console.log('The user file has been updated!');
-//     })
-//     // how to check if[user] exists in db
-//     users.hasOwnProperty('testUser@gmail.com')
+app.get('/test', (req,res) => {
+    // test getting accounts 
+    const accounts = getAccounts()
+    // updateLastID()
 
 
-//     res.send('check console')
-// })
+    // end  test getting accounts
+
+    // // read file
+    // fs.readFile('./user.json', 'utf8', (err, data) => {
+    //     console.log("data form user data file")
+    //     const parsedData = JSON.parse(data) // convert json string to js object
+    //     console.log("parsed data", parsedData)
+    // })
+
+    // // read file sync
+    // const rawData = fs.readFileSync('./user.json')
+    // let users = JSON.parse(rawData)
+
+    // // how to add a user
+    // users['newUserEmail@gmail.com'] = "newTestUserPass"
+
+    // // add new user to the user.json file
+    // fs.writeFile('./user.json', JSON.stringify(users, null, 4), (err) => {
+    //     if (err) throw err;
+    //     console.log('The user file has been updated!');
+    // })
+    // // how to check if[user] exists in db
+    // users.hasOwnProperty('testUser@gmail.com')
+
+
+    res.send('check console')
+})
 
 app.get('*', (req, res) => {
     res.send('This page cannot be found (^_^)')
