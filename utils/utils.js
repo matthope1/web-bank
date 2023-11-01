@@ -30,6 +30,10 @@ const getAccounts = () => {
 	return accounts || {}
 }
 
+const addNewAccount = (newAccount) => {
+
+}
+
 const addNewUser = (newUserEmail, newUserPass) => {
 	// get current users data 
 	// read file sync
@@ -57,7 +61,6 @@ const addNewUser = (newUserEmail, newUserPass) => {
 
 const validatePassword = (username, password) => {
 	const userData = getUserData()
-	console.log("validating user pass...userData", userData)
 	// does user exist in db?
 	const userExists = userData.hasOwnProperty(username)
 	if (!userExists) {

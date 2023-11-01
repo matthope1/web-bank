@@ -35,7 +35,6 @@ app.get('/', (req, res) => {
 })
 
 app.post('/logout', (req, res) => {
-    console.log("logout endpoint hit")
     req.session.destroy()
     res.redirect('/login')
 })
@@ -43,59 +42,42 @@ app.post('/logout', (req, res) => {
 app.get("/login", (req,res) => {
     
     console.log("login get session", req.session.MySession)
+    console.log("req.session.username" ,req.session.username)
 
-    var bankData = {
-        bankName: "Club Cyberia Bank",
-        timeOpen: {
-            startTime: "9:30AM",
-            finishTime: "12:30PM",
-        },
-        myList: ["item1", "item2", "item3"],
-        location: {
-            city: "Toronto",
-        },
-    };
-
-    let page = 'loginPage'
-
-    if (req.session.MySession) { 
-        console.log("session exists")
-        bankData.username = req.session.MySession
+    if (req.session.username) { 
+        bankData.username = req.session.username
         page = 'bankingPage'
+        res.redirect('/banking')
+        return
     }
-    res.render(page, {                                               
-        data: bankData 
-    });
+    res.render('loginPage', {});
 })
 
 app.post('/login', (req, res) => {
     const {username, password} = req.body
     const {passValid, msg} = validatePassword(username, password)
-    // if its not valid, redirect to login page with err message
 
-    let page = ''
-    let data = {
-        msg: msg,
-        username: username,
-        bankName: "Club Cyberia Bank",
-        timeOpen: {
-            startTime: "9:30AM",
-            finishTime: "12:30PM",
-        },
-        myList: ["item1", "item2", "item3"],
-        location: {
-            city: "Toronto",
-        },
+    if (!passValid) {
+        // if its not valid, redirect to login page with err message
+        res.render('loginPage', {msg : msg})
+        return
     }
 
-    page = passValid ? 'bankingPage' : 'loginPage'
-    console.log("setting username cookie..." ,username)
-    req.session.MySession = username;		
-    console.log("req.session.MySession" ,req.session.MySession)
-
-    res.render(page, {data})
+    req.session.username = username
+    res.redirect('/banking')
 })
 
+app.get('/banking', (req, res) => {
+    const username = req.session.username
+    if (!username)  {
+        res.redirect('/login')
+    }
+    res.render('bankingPage', {data: {username}})
+})
+
+app.post('/banking', (req, res) => {
+    console.log("banking req body", req.body)
+})
 
 app.get('/test', (req,res) => {
     // test getting accounts 
