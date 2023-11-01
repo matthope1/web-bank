@@ -40,39 +40,45 @@ app.post('/logout', (req, res) => {
 })
 
 app.get("/login", (req,res) => {
-    
-    console.log("login get session", req.session.MySession)
-    console.log("req.session.username" ,req.session.username)
+    const username = req.session.username
 
-    if (req.session.username) { 
-        bankData.username = req.session.username
+    if (username) { 
+        bankData.username = username 
         page = 'bankingPage'
         res.redirect('/banking')
-        return
+    } else {
+        res.render('loginPage', {});
     }
-    res.render('loginPage', {});
 })
 
 app.post('/login', (req, res) => {
     const {username, password} = req.body
     const {passValid, msg} = validatePassword(username, password)
 
-    if (!passValid) {
-        // if its not valid, redirect to login page with err message
-        res.render('loginPage', {msg : msg})
-        return
+    const data = {  
+        msg: msg,
     }
 
-    req.session.username = username
-    res.redirect('/banking')
+    if (!passValid) {
+        // if its not valid, redirect to login page with err message
+        res.render('loginPage', {data})
+    } else {
+        req.session.username = username
+        res.redirect('/banking')
+    }
 })
 
 app.get('/banking', (req, res) => {
     const username = req.session.username
+    const data = {
+        username: username
+    }
+
     if (!username)  {
         res.redirect('/login')
+    } else {
+        res.render('bankingPage', {data})
     }
-    res.render('bankingPage', {data: {username}})
 })
 
 app.post('/banking', (req, res) => {
