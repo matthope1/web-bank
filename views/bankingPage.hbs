@@ -103,6 +103,9 @@
             margin: 20px 0;
         }
 
+        .err-msg {
+            color: #cc0000;
+        }
 
     </style>
 </head>
@@ -131,8 +134,8 @@
                     </div>
 
                     <div>
-                        <input id="open-acc" type="radio" name="open-acc" onclick="clickRadioBtn()">
-                        <label for="open-acc" ><b>Open Account</b></label>
+                        <input id="openAcc" type="radio" name="openAcc" onclick="clickRadioBtn()" checked="checked">
+                        <label for="openAcc" ><b>Open Account</b></label>
                     </div>
 
                     <div>
@@ -140,13 +143,16 @@
                         <label for="withdrawal"><b>Withdrawal</b></label>
                     </div>
 
-                    <button disabled ="submit-btn" type="submit">Submit</button>
+                    {{#if data.msg}}
+                        <p class="err-msg">{{data.msg}}</p>
+                    {{/if}}
+
+                    <button  class="submit-btn" type="submit">Submit</button>
                 </div>
             </form>
         </div>
 
-        {{!-- <form id="logoutForm" method="get" > --}}
-        <form id="logoutForm" method="post" action="http://localhost:3000/logout">
+        <form id="logoutForm" method="post" action="/logout">
             <input type="text" name="logout" value="logout" autocomplete="on">
         </form>
 
@@ -157,19 +163,21 @@
         logoutForm.submit()
     }
 
+    {{!-- document.getElementById('openAcc').click() --}}
+
     document.getElementById('balance').addEventListener('click', () => {
         document.getElementById('deposit').checked = false
         document.getElementById('withdrawal').checked = false
-        document.getElementById('open-acc').checked = false
+        document.getElementById('openAcc').checked = false
     })
 
     document.getElementById('deposit').addEventListener('click', () => {
         document.getElementById('balance').checked = false
         document.getElementById('withdrawal').checked = false
-        document.getElementById('open-acc').checked = false
+        document.getElementById('openAcc').checked = false
     })
 
-    document.getElementById('open-acc').addEventListener('click', () => {
+    document.getElementById('openAcc').addEventListener('click', () => {
         document.getElementById('withdrawal').checked = false
         document.getElementById('balance').checked = false
         document.getElementById('deposit').checked = false
@@ -178,7 +186,7 @@
     document.getElementById('withdrawal').addEventListener('click', () => {
         document.getElementById('balance').checked = false
         document.getElementById('deposit').checked = false
-        document.getElementById('open-acc').checked = false
+        document.getElementById('openAcc').checked = false
     })
 
 </script>

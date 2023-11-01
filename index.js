@@ -43,8 +43,6 @@ app.get("/login", (req,res) => {
     const username = req.session.username
 
     if (username) { 
-        bankData.username = username 
-        page = 'bankingPage'
         res.redirect('/banking')
     } else {
         res.render('loginPage', {});
@@ -83,25 +81,59 @@ app.get('/banking', (req, res) => {
 
 app.post('/banking', (req, res) => {
     console.log("banking req body", req.body)
+    const { accNum, deposit, balance, withdrawal, openAcc } = req.body
+    // TODO: maybe body can return a single response rather than a bunch of different options ..
+    // that way we can just take the response and just redirect to that page instead of having 
+    // to check each one individually
+
+    const username = req.session.username
+
+    if (!username) {
+        res.redirect('/login')
+        return
+    }
+
+    if (openAcc) {
+        // display open account page
+        res.redirect('/openAccount')
+        return
+    } 
+
+    if (!accNum) {
+        const data = {
+            username: username,
+            msg: "Missing account number",
+        }
+        // send back item to be re selected 
+        res.render('bankingPage', {data})
+        return
+    }
+
+    if (deposit) {
+        // display deposit page
+        res.redirect('/deposit')
+        return
+    }
+
+    if (balance) {
+        // display balance page
+        res.redirect('/balance')
+        return
+    }
+
+    if (withdrawal) {
+        res.redirect('/withdrawal')
+        return
+    }
+
+    res.redirect('/banking')
 })
 
 app.get('/test', (req,res) => {
     // test getting accounts 
     const accounts = getAccounts()
     // updateLastID()
-
-
     // end  test getting accounts
-
-    // // read file
-    // fs.readFile('./user.json', 'utf8', (err, data) => {
-    //     console.log("data form user data file")
-    //     const parsedData = JSON.parse(data) // convert json string to js object
-    //     console.log("parsed data", parsedData)
-    // })
-
-
-
     res.send('check console')
 })
 
