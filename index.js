@@ -10,6 +10,7 @@ const port = process.env.PORT || 3000
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+app.use(express.static(path.join(__dirname, '/public')));
 
 let strRandom = randomStr.generate();
 
@@ -87,6 +88,7 @@ app.post('/banking', (req, res) => {
     // to check each one individually
 
     const username = req.session.username
+    req.session.accNum = accNum
 
     if (!username) {
         res.redirect('/login')
@@ -128,6 +130,50 @@ app.post('/banking', (req, res) => {
 
     res.redirect('/banking')
 })
+
+app.get('/openAccount', (req, res) => {
+    const username = req.session.username
+    if (!username) {
+        res.redirect('/login')
+        return
+    }
+    res.render('openAccountPage', {username})
+})
+
+app.post('/openAccount', (req, res) => {
+    const username = req.session.username
+    if (!username) {
+        res.redirect('/login')
+        return
+    }
+
+})
+
+app.get('/deposit', (req, res) => {
+
+})
+
+app.post('/deposit', (req, res) => {
+
+})
+
+app.get('/balance', (req, res) => {
+
+})
+
+app.post('/balance', (req, res) => {
+
+})
+
+app.get('/withdrawal', (req, res) => {
+
+})
+
+app.post('/withdrawal', (req, res) => {
+
+})
+
+
 
 app.get('/test', (req,res) => {
     // test getting accounts 

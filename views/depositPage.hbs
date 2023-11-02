@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<title>Web Bank</title>
+
+    <link rel="stylesheet" href="/css/theme.css">
+    <style>
+
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="content">
+            <h1>Club Cyberia Bank</h1>
+            <form method="post">
+                <div class="container">
+
+                    <label for=""><b></b></label>
+                    <input type="text" placeholder="input" name="" required>
+
+                    {{#if data.msg}}
+                        <p class="err-msg">{{data.msg}}</p>
+                    {{/if}}
+
+                    <button type="submit">submit</button>
+                </div>
+            </form>
+        
+        </div>
+    </div>
+</body>
+</html>
+
+

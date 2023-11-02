@@ -30,7 +30,8 @@ const getAccounts = () => {
 	return accounts || {}
 }
 
-const addNewAccount = (newAccount) => {
+const addNewAccount = (newAccountType) => {
+
 
 }
 
