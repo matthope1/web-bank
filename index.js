@@ -150,10 +150,38 @@ app.post('/openAccount', (req, res) => {
 })
 
 app.get('/deposit', (req, res) => {
+    const username = req.session.username
+    if (!username) {
+        res.redirect('/login')
+        return
+    }
+    const accNum = req.session.accNum
+    if (!accNum) {
+        const data = {
+            msg: "Missing account number",
+            accNum: accNum,
+        }
+        res.render('bankingPage', {data})
+        return
+    }
+    const data = {
+        accNum: accNum,
+    }
 
+    res.render('depositPage', {data})
 })
 
 app.post('/deposit', (req, res) => {
+    // if the user is not logged in, redirect to login page
+    const username = req.session.username
+    if (!username) {
+        res.redirect('/login')
+        return
+    }
+    // if request is a cancel request, return to banking page
+
+    
+
 
 })
 
@@ -176,7 +204,7 @@ app.get('/balance', (req, res) => {
 
     const accounts = getAccounts()
     const accountData = accounts[`${accNum}`]
-    console.log("account data", accountData)
+    // TODO: if the account number isn't in the db, send back to banking page with error message
 
     const data = {
         username: username,
@@ -184,8 +212,8 @@ app.get('/balance', (req, res) => {
         accType: accountData.accountType,
         accBalance: accountData.accountBalance,
     }
-    res.render('balancePage', {data})
 
+    res.render('balancePage', {data})
 })
 
 app.post('/balance', (req, res) => {
