@@ -15,15 +15,11 @@
             <h1>Club Cyberia Bank</h1>
             <form method="post">
                 <div class="container">
+									<p>Account Number: {{data.accNum}}</p>
+									<p>Type: {{data.accType}}</p>
+									<p>Balance: {{data.accBalance}}</p>
 
-                    <label for=""><b></b></label>
-                    <input type="text" placeholder="input" name="" required>
-
-                    {{#if data.msg}}
-                        <p class="err-msg">{{data.msg}}</p>
-                    {{/if}}
-
-                    <button type="submit">submit</button>
+									<button type="submit">Return</button>
                 </div>
             </form>
         

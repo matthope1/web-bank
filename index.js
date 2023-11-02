@@ -158,11 +158,38 @@ app.post('/deposit', (req, res) => {
 })
 
 app.get('/balance', (req, res) => {
+    const username = req.session.username
+    if (!username) {
+        res.redirect('/login')
+        return
+    }
+
+    const accNum = req.session.accNum
+    if (!accNum) {
+        const data = {
+            msg: "Missing account number",
+        }
+        // send back item to be re selected 
+        res.render('bankingPage', {data})
+        return
+    }
+
+    const accounts = getAccounts()
+    const accountData = accounts[`${accNum}`]
+    console.log("account data", accountData)
+
+    const data = {
+        username: username,
+        accNum: accNum,
+        accType: accountData.accountType,
+        accBalance: accountData.accountBalance,
+    }
+    res.render('balancePage', {data})
 
 })
 
 app.post('/balance', (req, res) => {
-
+    res.redirect('/banking')
 })
 
 app.get('/withdrawal', (req, res) => {
