@@ -5,7 +5,6 @@ const path = require('path')
 const fs = require('fs')
 const { validatePassword, getAccounts, updateLastID } = require('./utils/utils')
 const randomStr = require("randomstring");		
-const { hasSubscribers } = require('diagnostics_channel')
 const app = express()
 const port = process.env.PORT || 3000 
 
@@ -18,8 +17,10 @@ let strRandom = randomStr.generate();
 app.engine(".hbs", exphbs.engine({											
     extname: ".hbs",                                                 
     defaultLayout: false,                                              
-    layoutsDir: path.join(__dirname, "/views")                           
+    layoutsDir: path.join(__dirname, "/views"),
+    partialsDir: path.join(__dirname, '/views/partials') 
 }))
+
 
 app.set("view engine", ".hbs");   
 
@@ -33,7 +34,7 @@ app.use(session ({
 }));
 
 app.get('/', (req, res) => {
-  res.send(`It's alive... It's alive, it's moving, it's alive, it's alive, it's alive, it's alive, IT'S ALIVE!`)
+  res.redirect('/login')
 })
 
 app.post('/logout', (req, res) => {
