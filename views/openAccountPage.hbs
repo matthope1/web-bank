@@ -12,19 +12,26 @@
 <body>
     <div class="wrapper">
         <div class="content">
-					{{> title}}
-            {{!-- <h1>Club Cyberia Bank</h1> --}}
+            {{> title}}
             <form method="post">
                 <div class="container">
 
-                    <label for=""><b></b></label>
-                    <input type="text" placeholder="input" name="" required>
+                    <div>
+                        <input id="chequing" type="radio" name="chequing" onclick="clickRadioBtn()">
+                        <label for="chequing"><b>Chequing</b></label>
+                    </div>
+
+                    <div>
+                        <input id="savings" type="radio" name="savings" onclick="clickRadioBtn()">
+                        <label for="savings"><b>Savings</b></label>
+                    </div>
 
                     {{#if data.msg}}
                         <p class="err-msg">{{data.msg}}</p>
                     {{/if}}
 
-                    <button type="submit">submit</button>
+                    <button type="submit" name="submit" value="submit">Submit</button>
+                    <button type="submit" name="cancel" value="cancel">Cancel</button>
                 </div>
             </form>
         

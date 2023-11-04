@@ -88,6 +88,7 @@ app.post('/banking', (req, res) => {
     // TODO: maybe body can return a single response rather than a bunch of different options ..
     // that way we can just take the response and just redirect to that page instead of having 
     // to check each one individually
+    // TODO:  to accomplish the above, try giving the inputs all the same name but different value
 
     const username = req.session.username
     req.session.accNum = accNum
