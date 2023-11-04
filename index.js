@@ -3,7 +3,7 @@ const session = require('express-session')
 const exphbs = require('express-handlebars')
 const path = require('path')
 const fs = require('fs')
-const { validatePassword, getAccounts, updateLastID } = require('./utils/utils')
+const { validatePassword, getAccounts, addNewAccount, depositToAcc, accountExists} = require('./utils/utils')
 const randomStr = require("randomstring");		
 const app = express()
 const port = process.env.PORT || 3000 
@@ -148,6 +148,8 @@ app.post('/openAccount', (req, res) => {
         res.redirect('/login')
         return
     }
+    const {accountType} = req.body
+
 
 })
 
@@ -158,9 +160,9 @@ app.get('/deposit', (req, res) => {
         return
     }
     const accNum = req.session.accNum
-    if (!accNum) {
+    if (!accNum || !accountExists(accNum)) {
         const data = {
-            msg: "Missing account number",
+            msg: "Missing account number or account does not exist",
             accNum: accNum,
         }
         res.render('bankingPage', {data})
@@ -181,10 +183,29 @@ app.post('/deposit', (req, res) => {
         return
     }
     // if request is a cancel request, return to banking page
+    console.log("deposit req body", req.body)
 
-    
+    const {depositAmt, submit, cancel} = req.body
+    if (cancel) {
+        res.redirect('/banking')
+        return
+    }
 
+    const {success, msg} = depositToAcc(req.session.accNum, depositAmt)
+    console.log({success, msg})
+    // TODO: render with deposit message
+    const data = {
+        msg: msg,
+        accNum: req.session.accNum,
+    }
 
+    // if success render banking page with message
+    if (success) {
+        res.render('bankingPage', {data})
+    } else {
+        // if fail render deposit page with message
+        res.render('depositPage', {data})
+    }
 })
 
 app.get('/balance', (req, res) => {

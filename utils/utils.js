@@ -8,31 +8,57 @@ const getUserData = () => {
 	return users || {}
 }
 
-const updateLastID = () => {
+const getAccounts = () => {
 	const rawData = fs.readFileSync('./accounts.json')
 	let accounts = JSON.parse(rawData)
+	return accounts || {}
+}
+
+const accountExists = (accNum) => {
+	const accounts = getAccounts()
+	return accounts.hasOwnProperty(accNum)
+}
+
+const addNewAccount = (newAccountType) => {
+	const accounts = getAccounts()
 	let newId = parseInt(accounts.lastID) + 1
 	newId = newId.toString().padStart(7, '0')
 	accounts.lastID = newId
+	const updatedAccounts = {
+		...accounts,
+		// new record with key as new id
+		[newId]: {
+			accountType: newAccountType,
+			accountBalance: 0
+		}
+	}
 
-	fs.writeFile('./accounts.json', JSON.stringify(accounts, null, 4), (err) => {
+	fs.writeFile('./accounts.json', JSON.stringify(updatedAccounts, null, 4), (err) => {
 		if (err) throw err;
 		console.log('The accounts file has been updated!');
 	})
 }
 
-const getAccounts = () => {
-	const rawData = fs.readFileSync('./accounts.json')
-	let accounts = JSON.parse(rawData)
-	console.log("get accounts: ", accounts)
-	// remove the last id record from accounts
-	delete accounts.lastID
-	return accounts || {}
-}
+const depositToAcc = (accNum, depositAmt) => {
+	// returns boolean indicating success or failure
+	// and a msg to display to the user
 
-const addNewAccount = (newAccountType) => {
+	const accounts = getAccounts()
+	let newAccounts = {...accounts}
+	if (!accountExists(accNum)) {
+		return {success: false, msg: "Account number not found"} 
+	}
 
+	console.log("data from current account:", newAccounts[accNum])
 
+	accounts[accNum.toString()].accountBalance += parseInt(depositAmt)
+
+	fs.writeFile('./accounts.json', JSON.stringify(accounts, null, 4), (err) => {
+		if (err) throw err;
+		console.log('The accounts file has been updated!');
+	})
+
+	return {success: true, msg: "Deposit successful"} 
 }
 
 const addNewUser = (newUserEmail, newUserPass) => {
@@ -74,4 +100,4 @@ const validatePassword = (username, password) => {
 	return {passValid: false, msg: 'Invalid password'} 
 }
 
-module.exports = { validatePassword, getAccounts, updateLastID};
+module.exports = { validatePassword, getAccounts, addNewAccount, depositToAcc, accountExists};

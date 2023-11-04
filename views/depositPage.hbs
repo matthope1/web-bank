@@ -12,11 +12,10 @@
 <body>
     <div class="wrapper">
         <div class="content">
-					{{> title}}
-            {{!-- <h1>Club Cyberia Bank</h1> --}}
+            {{> title}}
             <form method="post">
                 <div class="container">
-										<p>Account Number: {{data.accNum}}</p>
+                    <p>Account Number: {{data.accNum}}</p>
 
                     <label for="depositAmt"><b>Deposit Amount</b></label>
                     <input type="number" placeholder="0" name="depositAmt" required>
@@ -25,8 +24,8 @@
                         <p class="err-msg">{{data.msg}}</p>
                     {{/if}}
 
-                    <button type="submit">Submit Deposit</button>
-                    <button type="submit">Cancel Deposit</button>
+                    <button name="submit" type="submit" value="submit">Submit Deposit</button>
+                    <button name="cancel" type="submit" value="cancel" >Cancel Deposit</button>
                 </div>
             </form>
         
