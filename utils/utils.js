@@ -20,6 +20,7 @@ const accountExists = (accNum) => {
 }
 
 const addNewAccount = (newAccountType) => {
+	console.log("add new account")
 	const accounts = getAccounts()
 	let newId = parseInt(accounts.lastID) + 1
 	newId = newId.toString().padStart(7, '0')
@@ -37,6 +38,8 @@ const addNewAccount = (newAccountType) => {
 		if (err) throw err;
 		console.log('The accounts file has been updated!');
 	})
+	return {success: true, msg: `Account #${newId} created`}
+
 }
 
 const depositToAcc = (accNum, depositAmt) => {

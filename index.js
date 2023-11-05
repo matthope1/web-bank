@@ -144,37 +144,73 @@ app.get('/openAccount', (req, res) => {
 })
 
 app.post('/openAccount', (req, res) => {
+    console.log("open account endpoint hit", req.body)
     const username = req.session.username
     if (!username) {
         res.redirect('/login')
         return
     }
-    const {accountType} = req.body
+    const {accType, submit, cancel} = req.body
 
+    if (cancel) {
+        res.redirect('/banking')
+        return
+    }
 
+    const {success, msg} = addNewAccount(accType)
+    const data = {
+        msg: msg,
+        username: username,
+    }
+    res.render('bankingPage', {data})
 })
 
 app.get('/deposit', (req, res) => {
+    // TODO: we're incorrectly using res.render
+    // the issue is that render won't change the url that were making requests to
+    // when we fail to make a deposit we end up trying to post rather than get from the
+    // banking page 
+    // to fix this were going to have to serve up error messages using the session 
+    // dso why does this work for the balance page? 
+
     const username = req.session.username
     if (!username) {
         res.redirect('/login')
         return
     }
+
     const accNum = req.session.accNum
-    if (!accNum || !accountExists(accNum)) {
+    console.log("deposit get accNum", accNum)
+    console.log("accnum type", typeof accNum)
+
+    if (!accNum) {
         const data = {
-            msg: "Missing account number or account does not exist",
-            accNum: accNum,
+            msg: "Missing account number",
         }
-        res.render('bankingPage', {data})
+        // res.render('bankingPage', {data})
+        res.redirect('/banking')
+        return
+    } 
+    console.log("account exists", accountExists(accNum))
+
+    if (!accountExists(accNum)) {
+        const data = {
+            msg: "Account number not found",
+        }
+        // res.render('bankingPage', {data})
+        delete req.session.accNum
+        res.redirect('/banking')    
         return
     }
+
     const data = {
         accNum: accNum,
     }
 
+    console.log("deposit rendering from HERE ")
     res.render('depositPage', {data})
 })
+
 
 app.post('/deposit', (req, res) => {
     // if the user is not logged in, redirect to login page
@@ -184,7 +220,6 @@ app.post('/deposit', (req, res) => {
         return
     }
     // if request is a cancel request, return to banking page
-    console.log("deposit req body", req.body)
 
     const {depositAmt, submit, cancel} = req.body
     if (cancel) {
@@ -194,19 +229,13 @@ app.post('/deposit', (req, res) => {
 
     const {success, msg} = depositToAcc(req.session.accNum, depositAmt)
     console.log({success, msg})
-    // TODO: render with deposit message
     const data = {
         msg: msg,
         accNum: req.session.accNum,
     }
 
-    // if success render banking page with message
-    if (success) {
-        res.render('bankingPage', {data})
-    } else {
-        // if fail render deposit page with message
-        res.render('depositPage', {data})
-    }
+    res.render('bankingPage', {data})
+
 })
 
 app.get('/balance', (req, res) => {
@@ -227,9 +256,15 @@ app.get('/balance', (req, res) => {
     }
 
     const accounts = getAccounts()
-    const accountData = accounts[`${accNum}`]
-    // TODO: if the account number isn't in the db, send back to banking page with error message
+    if (!accountExists(accNum)) {
+        const data = {
+            msg: "Account number not found",
+        }
+        res.render('bankingPage', {data})
+        return
+    }
 
+    const accountData = accounts[`${accNum}`]
     const data = {
         username: username,
         accNum: accNum,

@@ -17,26 +17,42 @@
                 <div class="container">
 
                     <div>
-                        <input id="chequing" type="radio" name="chequing" onclick="clickRadioBtn()">
-                        <label for="chequing"><b>Chequing</b></label>
+                        <input id="chequing" type="radio" name="accType" value="chequing" >
+                        <label for="accType"><b>Chequing</b></label>
                     </div>
 
                     <div>
-                        <input id="savings" type="radio" name="savings" onclick="clickRadioBtn()">
-                        <label for="savings"><b>Savings</b></label>
+                        <input id="savings" type="radio" name="accType" value="savings" >
+                        <label for="accType"><b>Savings</b></label>
                     </div>
 
                     {{#if data.msg}}
                         <p class="err-msg">{{data.msg}}</p>
                     {{/if}}
 
-                    <button type="submit" name="submit" value="submit">Submit</button>
+                    <button id="submit" type="submit" name="submit" value="submit">Submit</button>
                     <button type="submit" name="cancel" value="cancel">Cancel</button>
                 </div>
             </form>
         
         </div>
     </div>
+
+    <script>
+        document.getElementById('submit').disabled = true;
+
+        document.getElementById("chequing").addEventListener("click", function() {
+            console.log("happens")
+            document.getElementById("submit").disabled = false;
+            document.getElementById("savings").checked = false;
+            console.log("happens2")
+        });
+
+        document.getElementById("savings").addEventListener("click", function() {
+            document.getElementById("submit").disabled = false;
+            document.getElementById("chequing").checked = false;
+        }); 
+    </script>
 </body>
 </html>
 
