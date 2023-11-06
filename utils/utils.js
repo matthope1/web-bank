@@ -120,6 +120,9 @@ const addNewUser = (newUserEmail, newUserPass) => {
 }
 
 const validatePassword = (username, password) => {
+	// returns an object with a boolean indicating if the password is valid
+	// and msg for error/success 
+
 	const userData = getUserData()
 	// does user exist in db?
 	const userExists = userData.hasOwnProperty(username)

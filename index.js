@@ -75,6 +75,7 @@ app.get('/banking', (req, res) => {
         msg: req.session.msg,
     }
 
+    // clear any messages
     delete req.session.msg
 
     if (!username)  {
@@ -141,7 +142,6 @@ app.get('/openAccount', (req, res) => {
 })
 
 app.post('/openAccount', (req, res) => {
-    console.log("open account endpoint hit", req.body)
     const username = req.session.username
     if (!username) {
         res.redirect('/login')
@@ -161,13 +161,6 @@ app.post('/openAccount', (req, res) => {
 })
 
 app.get('/deposit', (req, res) => {
-    // TODO: we're incorrectly using res.render
-    // the issue is that render won't change the url that were making requests to
-    // when we fail to make a deposit we end up trying to post rather than get from the
-    // banking page 
-    // to fix this were going to have to serve up error messages using the session 
-    // so why does this work for the balance page? 
-
     const username = req.session.username
     if (!username) {
         res.redirect('/login')
@@ -293,7 +286,6 @@ app.post('/withdrawal', (req, res) => {
         return
     }
     // if request is a cancel request, return to banking page
-
     const {withdrawalAmt, submit, cancel} = req.body
     if (cancel) {
         res.redirect('/banking')
