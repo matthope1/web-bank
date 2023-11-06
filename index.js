@@ -3,7 +3,7 @@ const session = require('express-session')
 const exphbs = require('express-handlebars')
 const path = require('path')
 const fs = require('fs')
-const { validatePassword, getAccounts, addNewAccount, depositToAcc, accountExists} = require('./utils/utils')
+const { validatePassword, getAccounts, addNewAccount, depositToAcc, withdrawalFromAcc, accountExists} = require('./utils/utils')
 const randomStr = require("randomstring");		
 const app = express()
 const port = process.env.PORT || 3000 
@@ -127,6 +127,7 @@ app.post('/banking', (req, res) => {
     }
 
     if (withdrawal) {
+        console.log("redirecting to  withdrawal")
         res.redirect('/withdrawal')
         return
     }
@@ -171,7 +172,7 @@ app.get('/deposit', (req, res) => {
     // when we fail to make a deposit we end up trying to post rather than get from the
     // banking page 
     // to fix this were going to have to serve up error messages using the session 
-    // dso why does this work for the balance page? 
+    // so why does this work for the balance page? 
 
     const username = req.session.username
     if (!username) {
@@ -276,17 +277,72 @@ app.get('/balance', (req, res) => {
 })
 
 app.post('/balance', (req, res) => {
+    console.log("balance post")
     res.redirect('/banking')
 })
 
 app.get('/withdrawal', (req, res) => {
+    const username = req.session.username
+    if (!username) {
+        res.redirect('/login')
+        return
+    }
 
+    const accNum = req.session.accNum
+    console.log("withdrawal get accNum", accNum)
+
+    if (!accNum) {
+        const data = {
+            msg: "Missing account number",
+        }
+        // res.render('bankingPage', {data})
+        res.redirect('/banking')
+        return
+    } 
+    console.log("account exists", accountExists(accNum))
+
+    if (!accountExists(accNum)) {
+        const data = {
+            msg: "Account number not found",
+        }
+        // res.render('bankingPage', {data})
+        delete req.session.accNum
+        res.redirect('/banking')    
+        return
+    }
+
+    const data = {
+        accNum: accNum,
+    }
+
+    console.log("withdrawal rendering from HERE ")
+    res.render('withdrawalPage', {data})
 })
 
 app.post('/withdrawal', (req, res) => {
+    // if the user is not logged in, redirect to login page
+    const username = req.session.username
+    if (!username) {
+        res.redirect('/login')
+        return
+    }
+    // if request is a cancel request, return to banking page
 
+    const {withdrawalAmt, submit, cancel} = req.body
+    if (cancel) {
+        res.redirect('/banking')
+        return
+    }
+
+    const {success, msg} = withdrawalFromAcc(req.session.accNum, withdrawalAmt)
+    console.log({success, msg})
+    const data = {
+        msg: msg,
+        accNum: req.session.accNum,
+    }
+
+    res.render('bankingPage', {data})
 })
-
 
 
 app.get('/test', (req,res) => {

@@ -64,6 +64,35 @@ const depositToAcc = (accNum, depositAmt) => {
 	return {success: true, msg: "Deposit successful"} 
 }
 
+const withdrawalFromAcc = (accNum, withdrawalAmt) => {
+	// returns boolean indicating success or failure
+	// and a msg to display to the user
+
+	const accounts = getAccounts()
+	let newAccounts = {...accounts}
+	if (!accountExists(accNum)) {
+		return {success: false, msg: "Account number not found"} 
+	}
+
+	console.log("data from current account:", newAccounts[accNum])
+
+	// ensure that this amount does not make the account negative
+	const accountBalance = accounts[accNum.toString()].accountBalance
+
+	if (accountBalance < withdrawalAmt) {	
+		return {success: false, msg: "Insufficient funds"} 
+	}
+
+	accounts[accNum.toString()].accountBalance -= parseInt(withdrawalAmt)
+
+	fs.writeFile('./accounts.json', JSON.stringify(accounts, null, 4), (err) => {
+		if (err) throw err;
+		console.log('The accounts file has been updated!');
+	})
+
+	return {success: true, msg: "Withdrawal successful"} 
+}
+
 const addNewUser = (newUserEmail, newUserPass) => {
 	// get current users data 
 	// read file sync
@@ -103,4 +132,4 @@ const validatePassword = (username, password) => {
 	return {passValid: false, msg: 'Invalid password'} 
 }
 
-module.exports = { validatePassword, getAccounts, addNewAccount, depositToAcc, accountExists};
+module.exports = { validatePassword, getAccounts, addNewAccount, depositToAcc, accountExists, withdrawalFromAcc};

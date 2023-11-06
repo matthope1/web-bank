@@ -15,15 +15,17 @@
             {{> title}}
             <form method="post">
                 <div class="container">
+                    <p>Account Number: {{data.accNum}}</p>
 
-                    <label for=""><b></b></label>
-                    <input type="text" placeholder="input" name="" required>
+                    <label for="withdrawalAmt"><b>Withdrawal Amount</b></label>
+                    <input type="number" placeholder="0" name="withdrawalAmt" required>
 
                     {{#if data.msg}}
                         <p class="err-msg">{{data.msg}}</p>
                     {{/if}}
 
-                    <button type="submit">Submit</button>
+                    <button name="submit" type="submit" value="submit">Submit Withdrawal</button>
+                    <button name="cancel" type="submit" value="cancel" >Cancel Withdrawal</button>
                 </div>
             </form>
         
