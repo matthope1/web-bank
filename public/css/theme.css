@@ -61,6 +61,12 @@ input {
     top: -170px;
 }
 
+.msg {
+    color: #a688fa;
+    font-weight: bold;
+    text-align: center;
+}
+
 .err-msg {
     color: #cc0000;
 }

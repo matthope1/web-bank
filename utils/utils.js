@@ -35,11 +35,12 @@ const addNewAccount = (newAccountType) => {
 	}
 
 	fs.writeFile('./accounts.json', JSON.stringify(updatedAccounts, null, 4), (err) => {
-		if (err) throw err;
-		console.log('The accounts file has been updated!');
+		if (err) {
+			return {success: false, msg: "Error writing to file"}
+		} 
 	})
+	console.log('The accounts file has been updated!');
 	return {success: true, msg: `Account #${newId} created`}
-
 }
 
 const depositToAcc = (accNum, depositAmt) => {

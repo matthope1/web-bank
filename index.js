@@ -21,7 +21,6 @@ app.engine(".hbs", exphbs.engine({
     partialsDir: path.join(__dirname, '/views/partials') 
 }))
 
-
 app.set("view engine", ".hbs");   
 
 app.use(session ({
@@ -72,8 +71,11 @@ app.post('/login', (req, res) => {
 app.get('/banking', (req, res) => {
     const username = req.session.username
     const data = {
-        username: username
+        username: username,
+        msg: req.session.msg,
     }
+
+    delete req.session.msg
 
     if (!username)  {
         res.redirect('/login')
@@ -83,13 +85,7 @@ app.get('/banking', (req, res) => {
 })
 
 app.post('/banking', (req, res) => {
-    console.log("banking req body", req.body)
     const { accNum, deposit, balance, withdrawal, openAcc } = req.body
-    // TODO: maybe body can return a single response rather than a bunch of different options ..
-    // that way we can just take the response and just redirect to that page instead of having 
-    // to check each one individually
-    // TODO:  to accomplish the above, try giving the inputs all the same name but different value
-
     const username = req.session.username
     req.session.accNum = accNum
 
@@ -141,7 +137,7 @@ app.get('/openAccount', (req, res) => {
         res.redirect('/login')
         return
     }
-    res.render('openAccountPage', {username})
+    res.render('openAccountPage', {})
 })
 
 app.post('/openAccount', (req, res) => {
@@ -158,12 +154,10 @@ app.post('/openAccount', (req, res) => {
         return
     }
 
-    const {success, msg} = addNewAccount(accType)
-    const data = {
-        msg: msg,
-        username: username,
-    }
-    res.render('bankingPage', {data})
+    const {_, msg} = addNewAccount(accType)
+    req.session.msg = msg
+
+    res.redirect('/banking')
 })
 
 app.get('/deposit', (req, res) => {
@@ -181,24 +175,15 @@ app.get('/deposit', (req, res) => {
     }
 
     const accNum = req.session.accNum
-    console.log("deposit get accNum", accNum)
-    console.log("accnum type", typeof accNum)
 
     if (!accNum) {
-        const data = {
-            msg: "Missing account number",
-        }
-        // res.render('bankingPage', {data})
+        req.session.msg = "Missing account number"
         res.redirect('/banking')
         return
     } 
-    console.log("account exists", accountExists(accNum))
 
     if (!accountExists(accNum)) {
-        const data = {
-            msg: "Account number not found",
-        }
-        // res.render('bankingPage', {data})
+        req.session.msg = "Account number not found"
         delete req.session.accNum
         res.redirect('/banking')    
         return
@@ -220,23 +205,19 @@ app.post('/deposit', (req, res) => {
         res.redirect('/login')
         return
     }
-    // if request is a cancel request, return to banking page
 
+    // if request is a cancel request, return to banking page
     const {depositAmt, submit, cancel} = req.body
     if (cancel) {
+        req.session.msg = "Deposit cancelled"
         res.redirect('/banking')
         return
     }
 
     const {success, msg} = depositToAcc(req.session.accNum, depositAmt)
-    console.log({success, msg})
-    const data = {
-        msg: msg,
-        accNum: req.session.accNum,
-    }
 
-    res.render('bankingPage', {data})
-
+    req.session.msg = msg
+    res.redirect('/banking')
 })
 
 app.get('/balance', (req, res) => {
@@ -248,20 +229,15 @@ app.get('/balance', (req, res) => {
 
     const accNum = req.session.accNum
     if (!accNum) {
-        const data = {
-            msg: "Missing account number",
-        }
-        // send back item to be re selected 
-        res.render('bankingPage', {data})
+        req.session.msg = "Missing account number"
+        res.redirect('/banking')
         return
     }
 
     const accounts = getAccounts()
     if (!accountExists(accNum)) {
-        const data = {
-            msg: "Account number not found",
-        }
-        res.render('bankingPage', {data})
+        req.session.msg = "Account number not found"
+        res.redirect('/banking')
         return
     }
 
@@ -277,7 +253,6 @@ app.get('/balance', (req, res) => {
 })
 
 app.post('/balance', (req, res) => {
-    console.log("balance post")
     res.redirect('/banking')
 })
 
@@ -289,23 +264,15 @@ app.get('/withdrawal', (req, res) => {
     }
 
     const accNum = req.session.accNum
-    console.log("withdrawal get accNum", accNum)
 
     if (!accNum) {
-        const data = {
-            msg: "Missing account number",
-        }
-        // res.render('bankingPage', {data})
+        req.session.msg = "Missing account number"
         res.redirect('/banking')
         return
     } 
-    console.log("account exists", accountExists(accNum))
 
     if (!accountExists(accNum)) {
-        const data = {
-            msg: "Account number not found",
-        }
-        // res.render('bankingPage', {data})
+        req.session.msg = "Account number not found"
         delete req.session.accNum
         res.redirect('/banking')    
         return
@@ -315,7 +282,6 @@ app.get('/withdrawal', (req, res) => {
         accNum: accNum,
     }
 
-    console.log("withdrawal rendering from HERE ")
     res.render('withdrawalPage', {data})
 })
 
@@ -335,26 +301,22 @@ app.post('/withdrawal', (req, res) => {
     }
 
     const {success, msg} = withdrawalFromAcc(req.session.accNum, withdrawalAmt)
-    console.log({success, msg})
-    const data = {
-        msg: msg,
-        accNum: req.session.accNum,
-    }
+    req.session.msg = msg
 
-    res.render('bankingPage', {data})
+    res.redirect('/banking')
 })
 
 
-app.get('/test', (req,res) => {
-    // test getting accounts 
-    const accounts = getAccounts()
-    // updateLastID()
-    // end  test getting accounts
-    res.send('check console')
-})
+// app.get('/test', (req,res) => {
+//     // test getting accounts 
+//     const accounts = getAccounts()
+//     // updateLastID()
+//     // end  test getting accounts
+//     res.send('check console')
+// })
 
 app.get('*', (req, res) => {
-    res.send('This page cannot be found (^_^)')
+    res.send('This page cannot be found (?_?)')
 })
 
 app.listen(port, () => {
