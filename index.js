@@ -124,7 +124,6 @@ app.post('/banking', (req, res) => {
     }
 
     if (withdrawal) {
-        console.log("redirecting to  withdrawal")
         res.redirect('/withdrawal')
         return
     }
@@ -186,7 +185,6 @@ app.get('/deposit', (req, res) => {
         accNum: accNum,
     }
 
-    console.log("deposit rendering from HERE ")
     res.render('depositPage', {data})
 })
 
@@ -273,7 +271,9 @@ app.get('/withdrawal', (req, res) => {
 
     const data = {
         accNum: accNum,
+        msg : req.session.msg
     }
+    delete req.session.msg
 
     res.render('withdrawalPage', {data})
 })
@@ -289,6 +289,7 @@ app.post('/withdrawal', (req, res) => {
     const {withdrawalAmt, submit, cancel} = req.body
     if (cancel) {
         res.redirect('/banking')
+        req.session.msg = "Withdrawal cancelled"
         return
     }
 

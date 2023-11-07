@@ -39,7 +39,7 @@ const addNewAccount = (newAccountType) => {
 			return {success: false, msg: "Error writing to file"}
 		} 
 	})
-	console.log('The accounts file has been updated!');
+	// console.log('The accounts file has been updated!');
 	return {success: true, msg: `Account #${newId} created`}
 }
 
@@ -48,18 +48,15 @@ const depositToAcc = (accNum, depositAmt) => {
 	// and a msg to display to the user
 
 	const accounts = getAccounts()
-	let newAccounts = {...accounts}
 	if (!accountExists(accNum)) {
 		return {success: false, msg: "Account number not found"} 
 	}
-
-	console.log("data from current account:", newAccounts[accNum])
 
 	accounts[accNum.toString()].accountBalance += parseInt(depositAmt)
 
 	fs.writeFile('./accounts.json', JSON.stringify(accounts, null, 4), (err) => {
 		if (err) throw err;
-		console.log('The accounts file has been updated!');
+		// console.log('The accounts file has been updated!');
 	})
 
 	return {success: true, msg: "Deposit successful"} 
@@ -70,12 +67,9 @@ const withdrawalFromAcc = (accNum, withdrawalAmt) => {
 	// and a msg to display to the user
 
 	const accounts = getAccounts()
-	let newAccounts = {...accounts}
 	if (!accountExists(accNum)) {
 		return {success: false, msg: "Account number not found"} 
 	}
-
-	console.log("data from current account:", newAccounts[accNum])
 
 	// ensure that this amount does not make the account negative
 	const accountBalance = accounts[accNum.toString()].accountBalance
@@ -88,7 +82,7 @@ const withdrawalFromAcc = (accNum, withdrawalAmt) => {
 
 	fs.writeFile('./accounts.json', JSON.stringify(accounts, null, 4), (err) => {
 		if (err) throw err;
-		console.log('The accounts file has been updated!');
+		// console.log('The accounts file has been updated!');
 	})
 
 	return {success: true, msg: "Withdrawal successful"} 
