@@ -40,7 +40,7 @@ const addNewAccount = (newAccountType) => {
 		} 
 	})
 	// console.log('The accounts file has been updated!');
-	return {success: true, msg: `Account #${newId} created`}
+	return {success: true, msg: `Account #${newId} created`, newId: newId}
 }
 
 const depositToAcc = (accNum, depositAmt) => {
@@ -78,7 +78,7 @@ const withdrawalFromAcc = (accNum, withdrawalAmt) => {
 		return {success: false, msg: "Insufficient funds"} 
 	}
 
-	accounts[accNum.toString()].accountBalance -= parseInt(withdrawalAmt)
+	accounts[accNum.toString()].accountBalance -= parseInt(withdrawalAmt).toFixed(2)
 
 	fs.writeFile('./accounts.json', JSON.stringify(accounts, null, 4), (err) => {
 		if (err) throw err;

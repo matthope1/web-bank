@@ -10,6 +10,7 @@ const banking = require('./routes/banking')
 const openAccount = require('./routes/openAccount')
 const deposit = require('./routes/deposit')
 const withdrawal = require('./routes/withdrawal')
+const balance = require('./routes/balance')
 const mongoUtil = require('./mongoDb/dbConnect')
 const app = express()
 const port = process.env.PORT || 3000 
@@ -42,6 +43,11 @@ app.use(session ({
 (async () => {
     const database = await mongoUtil.connectDb() 
 
+    app.use((req, res, next) => {
+        req.database = database
+        next()
+    })
+
     app.get('/', (req, res) => {
         res.redirect('/login')
     })
@@ -65,6 +71,9 @@ app.use(session ({
 
     app.get('/withdrawal', withdrawal)
     app.post('/withdrawal', withdrawal)
+
+    app.get('/balance', balance)
+    app.post('/balance', balance)
 
     app.get('/test', async (req,res) => {
         // // test getting accounts 

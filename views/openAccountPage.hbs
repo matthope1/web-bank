@@ -17,12 +17,21 @@
                 <div class="container">
 
                     <div>
-                        <input id="chequing" type="radio" name="accType" value="chequing" >
+                        {{#if data.disableChequing}}
+                            <input id="chequing" type="radio" name="accType" value="chequing" disabled>
+                        {{else}}
+                            <input id="chequing" type="radio" name="accType" value="chequing" >
+                        {{/if}}
                         <label for="accType"><b>Chequing</b></label>
                     </div>
 
                     <div>
-                        <input id="savings" type="radio" name="accType" value="savings" >
+                        {{#if data.disableSavings}}
+                            <input id="savings" type="radio" name="accType" value="savings" disabled>
+                        {{else}}
+                            <input id="savings" type="radio" name="accType" value="savings" >
+                        {{/if}}
+
                         <label for="accType"><b>Savings</b></label>
                     </div>
 

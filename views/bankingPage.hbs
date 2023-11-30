@@ -56,25 +56,49 @@
             <form method="post">
                 <div class="container">
 
-                    <input id="accNum" type="text" placeholder="Account number" name="accNum">
+                    <select id="accNum" name="accNum">
+                        {{#if data.chequing}}
+                            <option value={{data.chequing}}>{{data.chequing}}</option>
+                        {{/if}}
+                        {{#if data.savings}}
+                            <option value={{data.savings}}>{{data.savings}}</option>
+                        {{/if}}
+                    </select>
 
                     <div>
-                        <input id="balance" type="radio" name="balance" onclick="clickRadioBtn()">
+                        {{#if data.noAccounts}}
+                            <input id="balance" type="radio" name="balance" onclick="clickRadioBtn()" disabled>
+                        {{else}}
+                            <input id="balance" type="radio" name="balance" onclick="clickRadioBtn()">
+                        {{/if}}
                         <label for="balance"><b>Balance</b></label>
                     </div>
 
                     <div>
-                        <input id="deposit" type="radio" name="deposit" onclick="clickRadioBtn()">
+                        {{#if data.noAccounts}}
+                            <input id="deposit" type="radio" name="deposit" onclick="clickRadioBtn()" disabled>
+                        {{else}}
+                            <input id="deposit" type="radio" name="deposit" onclick="clickRadioBtn()">
+                        {{/if}}
                         <label for="deposit"><b>Deposit</b></label>
                     </div>
 
                     <div>
-                        <input id="openAcc" type="radio" name="openAcc" onclick="clickRadioBtn()" checked="checked">
-                        <label for="openAcc" ><b>Open Account</b></label>
+
+                        {{#if data.disableAccountCreation}}
+                            <input id="openAcc" type="radio" name="openAcc" onclick="clickRadioBtn()" disabled>
+                        {{else}}
+                            <input id="openAcc" type="radio" name="openAcc" onclick="clickRadioBtn()" >
+                        {{/if}}
+                            <label for="openAcc"><b>Open Account</b></label>
                     </div>
 
                     <div>
-                        <input id="withdrawal" type="radio", name="withdrawal" onclick="clickRadioBtn()">
+                        {{#if data.noAccounts}}
+                            <input id="withdrawal" type="radio", name="withdrawal" onclick="clickRadioBtn()" disabled>
+                        {{else}}
+                            <input id="withdrawal" type="radio", name="withdrawal" onclick="clickRadioBtn()">
+                        {{/if}}
                         <label for="withdrawal"><b>Withdrawal</b></label>
                     </div>
 

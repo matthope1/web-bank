@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const { depositToAcc } = require('../utils/utils') 
+const { getAccounts, accountExists} = require('../utils/utils') 
 
 
-app.get('/balance', (req, res) => {
+router.get('/balance', (req, res) => {
 	const username = req.session.username
 	if (!username) {
 		res.redirect('/login')
@@ -35,6 +35,8 @@ app.get('/balance', (req, res) => {
 	res.render('balancePage', {data})
 })
 
-app.post('/balance', (req, res) => {
+router.post('/balance', (req, res) => {
 		res.redirect('/banking')
 })
+
+module.exports = router

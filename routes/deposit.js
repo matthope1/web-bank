@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { depositToAcc } = require('../utils/utils') 
+const { depositToAcc, accountExists } = require('../utils/utils') 
 
 
 router.get('/deposit', (req, res) => {
